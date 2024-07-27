@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* Button element used as accordion */
+        .accordion {
+            background-color: #EDF1F2; /* Lightest from palette */
+            color: #0C4160; /* Dark from palette */
+            cursor: pointer;
+            width: 100%;
+            min-width: 70%;
+            border: none;
+            border-top: 1px solid #C3CEDA; /* Add border between accordions */
+            text-align: left;
+            outline: none;
+            transition: 0.4s;
+            /* Padding around text */
+            padding-top: 1em;
+            padding-bottom: 1em;
+            padding-left: 0px;
+            padding-right: 0px;
+            /* Font family and size must match settings on website - Heading 4 */
+            font-family: 'Adobe Garamond Pro', serif;
+            font-weight: 400;
+            font-size: 22px;
+            vertical-align: middle;
+            /* For the '+' sign, which is a pseudo element, to show up centered */
+            display: flex;
+            align-items: center;
+        }
+
+        /* Expander '+' sign */
+        .accordion::after {
+            content: '+';
+            font-size: 24px;
+            color: #0C4160;
+            position: absolute;
+            right: 22px;
+        }
+
+        .accordion:last-child {
+            border-bottom: 1px solid #C3CEDA; /* Add top border for the first accordion */
+        }
+
+        /* When accordion is clicked, it's class is toggled to 'active'
+           and on mouse hover */
+        /* .active, .accordion:hover {
+            background-color: #C3CEDA;
+        } */
+        
+        /* Expander '+' sign toggled when active */
+        .active::after {
+            content: '-';
+        }
+
+        /* For element 'a'. Don't use the hyperlink default of blue underline */
+        .qlink:link {
+          text-decoration: none;
+          color: #071330;
+        }
+        .qlink:visited { text-decoration: none; }
+        .qlink:hover { text-decoration: none; }
+        .qlink:active { text-decoration: none; }
+
+        /* List styling of element 'ul' */
+        .qlist {
+            list-style-type: square;
+            padding-left: 1rem; /* 10px instead of the default 40px */
+        }
+
+        .qlistitem { padding-left: 0.5rem; } /* List item 'li' */
+        /*.qlistitem::marker { color: #BF6336; }*/
+
+        .panel {
+            /* Padding around text */
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 1em;
+            padding-right: 1em;
+            margin-top: -1em;
+            display: none;
+            background-color: #EDF1F2;
+            overflow: hidden;
+            white-space: pre-wrap;
+            color: #071330; /* Darkest from palette */
+            /* Font and line heights must match settings on website - Paragraph 2 */
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 17.6px;
+            line-height: 1.8em;
+        }
+    </style>
+</head>
+<body>
+    <div id="accordion-container"></div>
+
+    <script>
+        const url = 'https://vedantany.github.io/website-public/ask_swami_data.json';
+        const container = document.getElementById('accordion-container');
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach((item, index) => {
+                    const accordion = document.createElement('button');
+                    accordion.classList.add('accordion');
+                    accordion.innerText = item.category;
+
+                    const panel = document.createElement('div');
+                    panel.classList.add('panel');
+
+                    const list = document.createElement('ul');
+                    list.classList.add('qlist')
+                    panel.appendChild(list);
+                  
+                    item.links.forEach(link => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('qlistitem')
+                        const a = document.createElement('a');
+                        a.classList.add('qlink')
+                        a.href = link.url;
+                        a.innerText = link.text; /* + '\u{1F517}'; */
+                        a.target = '_blank';
+                        listItem.appendChild(a);
+                        list.appendChild(listItem);
+                    });
+
+                    container.appendChild(accordion);
+                    container.appendChild(panel);
+
+                    accordion.addEventListener('click', function () {
+                        this.classList.toggle('active');
+                        const nextPanel = this.nextElementSibling;
+                        nextPanel.style.display = nextPanel.style.display === 'block' ? 'none' : 'block';
+                    });
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>

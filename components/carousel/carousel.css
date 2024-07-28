@@ -4,16 +4,14 @@
 }
 
 .tileDescription {
-    font-size: 0.4em;
+    /* font-size: 0.4em; */
     text-align: center;
 }
 
 .tile {
-    height: 25vh;
-    width: 25vh;
+    height: 100%;
     background-color: hsla(192, 16.12903226%, 93.92156863%);
-    padding: 1em;
-    margin: 0.5em;
+    overflow: hidden;
 }
 
 .align-center {
@@ -22,7 +20,36 @@
     align-items: center;
 }
 
-.tileList {
+.tile-list-container {
+    height: 100%;
+    width: 80%;
+    overflow: hidden;
+}
+
+.tile-list {
     display: flex;
-    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.transition-effect {
+    transition: transform 500ms ease 0s;
+}
+
+
+#carousel {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
 }

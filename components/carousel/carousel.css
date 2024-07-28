@@ -10,7 +10,7 @@
 
 .tile {
     height: 100%;
-    background-color: hsla(192, 16.12903226%, 93.92156863%);
+    background-color: lightgray;
     overflow: hidden;
 }
 
@@ -36,9 +36,8 @@
     transition: transform 500ms ease 0s;
 }
 
-
 #carousel {
-    height: 50%;
+    height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;

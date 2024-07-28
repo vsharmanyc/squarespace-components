@@ -15,10 +15,10 @@ const tile = (content) => {
     const tile = createElement('div', { classList: 'tile align-center' });
     const tileBody = [
         createElement('img', { src: content.Image, classList: 'display-picture' }),
-        createElement('h1', { innerText: new Date(content.Date).toDateString() }),
-        createElement('h1', { innerText: content.Heading }),
-        createElement('h1', { innerText: content.Subheading }),
-        createElement('h1', { innerText: content.Description })
+        createElement('h3', { innerText: new Date(content.Date).toDateString() }),
+        createElement('div', { innerText: content.Heading }),
+        createElement('div', { innerText: content.Subheading }),
+        createElement('div', { innerText: content.Description })
     ]
     tile.append(...tileBody);
     return tile
@@ -81,7 +81,7 @@ const getSuggestedViewLimit = () => {
     }
 
     const tileListWidth = tileListElement.getBoundingClientRect().width;
-    const tileWidth = 300; // lets say a good width for a tile is 300px
+    const tileWidth = 350; // lets say a good width for a tile is 350px
     return Math.floor(tileListWidth / tileWidth);
 };
 

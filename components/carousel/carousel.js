@@ -5,29 +5,22 @@ let tileListElement; // reference to the tile list html element
 let touchstartX = 0
 let touchendX = 0
 
-// const src='https://images.squarespace-cdn.com/content/v1/6302837d1ce871273c7849b4/1661109136267-I4W0ZCFB7IG0YHZPLDRV/Sri-Ramakrishna.jpg?format=750w';
-
-// const descriptionHTMLData = `
-//     <h1>Gospel of Sri Ramakrishna</h1>
-//     <h1>Swami Sarvapriyananda<h1>
-//     <p> 
-//         Tuesdays - 7:30 PM EST</br>
-//         In-person only.</br>
-//         No registration needed.</br>
-//         Currently suspended and will resume in late September.
-//     </p>
-// `;
-
 const createElement = (tag, properties = {}) => {
     const element = document.createElement(tag);
     Object.entries(properties).forEach(([key, value]) => element[key] = value );
     return element;
 };
 
-const tile = (index) => {
-    const tile = createElement('div', { classList: 'tile' });
-    const text = createElement('h1', { innerText: index });
-    tile.appendChild(text)
+const tile = (content) => {
+    const tile = createElement('div', { classList: 'tile align-center' });
+    const tileBody = [
+        createElement('img', { src: content.Image, classList: 'display-picture' }),
+        createElement('h1', { innerText: new Date(content.Date).toDateString() }),
+        createElement('h1', { innerText: content.Heading }),
+        createElement('h1', { innerText: content.Subheading }),
+        createElement('h1', { innerText: content.Description })
+    ]
+    tile.append(...tileBody);
     return tile
 };
 
@@ -102,6 +95,14 @@ const resetView = () => {
     triggerTransition();
 };
 
+const setupView = (tiles) => {
+    tileListElement = document.querySelector('#carousel .tile-list');
+    viewLimit = getSuggestedViewLimit();
+    tileListElement.append(...tileList(tiles));
+    tileListElement.addEventListener('touchstart', onTouchStart);
+    tileListElement.addEventListener('touchend', onTouchEnd);
+}
+
 // reference stack overflow for detecting swipe right and left
 // https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
 
@@ -120,16 +121,19 @@ const onTouchEnd = (e) => {
     checkDirection();
 }
 
+
+const fetchCarouselContent = () => {
+    const url = 'https://script.google.com/macros/s/AKfycbwJrO9SW0gmpIyUXhVY4c9s-zo6NWgMENJqfjLWVv4gdccPgzerJZ8MXWXqi0MCtCze/exec';
+    return fetch(url)
+    .then(response => response.json())
+    .catch(() => []);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    const tiles = [];
-    for (let i = 0; i < 11; i++) {
-        tiles[i] = tile(i + 1);
-    }
-    tileListElement = document.querySelector('#carousel .tile-list');
-    viewLimit = getSuggestedViewLimit();
-    tileListElement.append(...tileList(tiles));
-    tileListElement.addEventListener('touchstart', onTouchStart);
-    tileListElement.addEventListener('touchend', onTouchEnd);
+    fetchCarouselContent().then(contentArray => {
+        const tiles = contentArray.map(tileContent => tile(tileContent));
+        setupView(tiles);
+    })
 });
 
 window.addEventListener('resize', resetView);

@@ -11,27 +11,50 @@ const createElement = (tag, properties = {}) => {
     return element;
 };
 
+const formatDate = (dateString) => {
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleString('default', { month: 'short', day: 'numeric' });
+    } catch(e) {
+        return '';
+    }
+}
+
 const tile = (content) => {
     const tile = createElement('div', { classList: 'tile align-center' });
 
-    const tileBody = [
-        content.Image && createElement('img', { src: content.Image, classList: 'display-picture' }),
-        createElement('div', { classList: 'tile-text' })
-    ]
+    const imageContainer = createElement('div', { classList: 'tile-img-container'});
+    const imageSizer = createElement('div');
+    imageSizer.append(createElement('img', { src: content.Image }));
+    content.Image && imageContainer.append(imageSizer);
 
-    tileBody[1].append(
-        createElement('h2', { innerText: new Date(content.Date).toDateString(), classList: 'date-header' }),
-        createElement('div', { innerText: content.Heading }),
-        createElement('div', { innerText: content.Subheading }),
-        createElement('div', { innerText: content.Description })
+    const tileText = createElement('div', { classList: 'tile-text' })
+
+    const dateTime = createElement('div', { classList: 'date-time' });
+    dateTime.append(
+        createElement('h2', { innerText: formatDate(content.Date), classList: 'date-header' }),
+        createElement('div', { innerText: content.Time, classList: 'time-header' })
+    );
+
+    const headings = createElement('p');
+    headings.append(
+        createElement('strong', { innerText: content.Heading || '', classList: 'tile-heading'}),
+        createElement('br'),
+        createElement('em', { innerText: content.Subheading || '', classList: 'tile-subheading' }),
     )
 
+    tileText.append(
+        dateTime,
+        headings,
+        createElement('p', { innerText: content.Description || '', classList: 'date-description' })
+    );
+
+    tile.append(imageContainer, tileText);
+
     if (content.Registration) {
-        const btn = createElement('a', { innerText: 'Register', href: content.Registration,  target: '_blank', classList: 'btn-link register' });
-        tileBody.push(btn);
+        tile.append(createElement('a', { innerText: 'Register', href: content.Registration,  target: '_blank', classList: 'tile-btn-link register' }));
     }
 
-    tile.append(...tileBody);
     return tile
 };
 

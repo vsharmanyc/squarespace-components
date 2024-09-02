@@ -22,27 +22,50 @@
                 return element;
             };
 
+            const formatDate = (dateString) => {
+                try {
+                    const date = new Date(dateString);
+                    return date.toLocaleString('default', { month: 'short', day: 'numeric' });
+                } catch(e) {
+                    return '';
+                }
+            }
+
             const tile = (content) => {
                 const tile = createElement('div', { classList: 'tile align-center' });
 
-                const tileBody = [
-                    content.Image && createElement('img', { src: content.Image, classList: 'display-picture' }),
-                    createElement('div', { classList: 'tile-text' })
-                ]
+                const imageContainer = createElement('div', { classList: 'tile-img-container'});
+                const imageSizer = createElement('div');
+                imageSizer.append(createElement('img', { src: content.Image }));
+                content.Image && imageContainer.append(imageSizer);
 
-                tileBody[1].append(
-                    createElement('h2', { innerText: new Date(content.Date).toDateString(), classList: 'date-header' }),
-                    createElement('div', { innerText: content.Heading }),
-                    createElement('div', { innerText: content.Subheading }),
-                    createElement('div', { innerText: content.Description })
+                const tileText = createElement('div', { classList: 'tile-text' })
+
+                const dateTime = createElement('div', { classList: 'date-time' });
+                dateTime.append(
+                    createElement('h2', { innerText: formatDate(content.Date), classList: 'date-header' }),
+                    createElement('div', { innerText: content.Time, classList: 'time-header' })
+                );
+
+                const headings = createElement('p');
+                headings.append(
+                    createElement('strong', { innerText: content.Heading || '', classList: 'tile-heading'}),
+                    createElement('br'),
+                    createElement('em', { innerText: content.Subheading || '', classList: 'tile-subheading' }),
                 )
 
+                tileText.append(
+                    dateTime,
+                    headings,
+                    createElement('p', { innerText: content.Description || '', classList: 'date-description' })
+                );
+
+                tile.append(imageContainer, tileText);
+
                 if (content.Registration) {
-                    const btn = createElement('a', { innerText: 'Register', href: content.Registration,  target: '_blank', classList: 'btn-link register' });
-                    tileBody.push(btn);
+                    tile.append(createElement('a', { innerText: 'Register', href: content.Registration,  target: '_blank', classList: 'tile-btn-link register' }));
                 }
 
-                tile.append(...tileBody);
                 return tile
             };
 
@@ -163,140 +186,150 @@
 
         <!-- carousel.css -->
         <style>
-        :root {
-            /* --accent-hsl: 19.7080292,55.91836735%,48.03921569%;
-            --darkAccent-hsl: 202.14285714,77.77777778%,21.17647059%;
-            --lightAccent-hsl: 211.30434783,23.71134021%,80.98039216%;
-            --safeLightAccent-hsl: 19.7080292,55.91836735%,48.03921569%;
-            --safeDarkAccent-hsl: 19.7080292,55.91836735%,48.03921569%;
-            --safeInverseAccent-hsl: 0,0%,100%;
-            --safeInverseLightAccent-hsl: 0,0%,100%;
-            --safeInverseDarkAccent-hsl: 0,0%,100%;
-            --black-hsl: 222.43902439,74.54545455%,10.78431373%;
-            --white-hsl: 192,16.12903226%,93.92156863%; */
-            --carousel-btn-size: 70px;
-        }
-
-        /* body {
-            margin: 0;
-            height: 100vh;
-        } */
-
-        #carousel {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            min-width: 320px;
-
-            .display-picture {
-                border-radius: 100%;
-                height: 35%;
-                width: 35%;
+            :root {
+                --carousel-btn-size: 70px;
             }
 
-            .tile-text {
-                /* font-size: 0.4em; */ 
-            }
-
-            .register {
-                background-color: hsl(var(--safeDarkAccent-hsl));
-                /* margin-top: 1rem; */
-            }
-
-            .date-header {
-                color: hsl(var(--safeDarkAccent-hsl));
-            }
-
-            .btn-link {
-                text-decoration: none;
-                color: hsl(var(--safeInverseDarkAccent-hsl));
-                padding: .9rem 1.2rem;
-                border-radius: 0.4rem;
-                box-sizing: border-box;
-                font-size: 1.1rem;
-            }
-
-            .tile {
-                height: 100%;
-                background-color: hsl(var(--white-hsl));
-                overflow: hidden;
-                justify-content: space-evenly;
-            }
-
-            .align-center {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .tile-list-container {
-                height: 100%;
-                width: 80%;
-                overflow: hidden;
-            }
-
-            .tile-list {
-                display: flex;
+            #carousel {
                 height: 100%;
                 width: 100%;
-            }
+                display: flex;
+                justify-content: center;
+                min-width: 320px;
 
-            .transition-effect {
-                transition: transform 500ms ease 0s;
-            }
+                .tile-img-container {
+                    height: 30%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: hidden;
 
-            .carousel-btn {
-                position: absolute;
-                svg {
-                    fill: white;
-                    .btn-arrow {
-                        stroke: white;
-                        fill: none;
-                        stroke-width: 2px;
-                        stroke-linejoin: round;
-                        stroke-linecap: round;
+                    div {
+                        height: 90%;
+                        img {
+                            object-fit: cover;
+                            object-position: top;
+                            height: 100%;
+                            aspect-ratio: 1 / 1;
+                            border-radius: 100%;
+                        }    
                     }
-                    width: 40px;
                 }
-                border: none;
-                cursor: pointer;
-                background-color: hsl(var(--safeDarkAccent-hsl));
-                opacity: 0.7;
-                width: var(--carousel-btn-size);
-                height:var(--carousel-btn-size);
-                border-radius: 100%;
-                align-self: center;
+
+
+                .tile-text {
+                    text-align: center;
+
+                    .date-header {
+                        color: hsl(var(--safeDarkAccent-hsl));
+                        font-size: 1.5rem;
+                        margin: 0;
+                    }
+                }
+
+                .register {
+                    background-color: hsl(var(--safeDarkAccent-hsl));
+                }
+
+                .tile-btn-link {
+                    text-decoration: none;
+                    color: hsl(var(--safeInverseDarkAccent-hsl));
+                    padding: .9rem 1.2rem;
+                    border-radius: 0.4rem;
+                    box-sizing: border-box;
+                    font-size: 1.1rem;
+                    letter-spacing: 0.05rem;
+                    line-height: normal;
+                }
+
+                .tile-btn-link:hover {
+                    opacity: 0.8;
+                }
+
+                .tile {
+                    height: 100%;
+                    background-color: hsl(var(--white-hsl));
+                    overflow: hidden;
+                }
+
+                .align-center {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .tile-list-container {
+                    height: 100%;
+                    width: 80%;
+                    overflow: hidden;
+                }
+
+                .tile-list {
+                    display: flex;
+                    height: 100%;
+                    width: 100%;
+                }
+
+                .transition-effect {
+                    transition: transform 500ms ease 0s;
+                }
+
+                .carousel-btn {
+                    position: absolute;
+                    svg {
+                        fill: white;
+                        .btn-arrow {
+                            stroke: white;
+                            fill: none;
+                            stroke-width: 2px;
+                            stroke-linejoin: round;
+                            stroke-linecap: round;
+                        }
+                        width: 40px;
+                    }
+                    border: none;
+                    cursor: pointer;
+                    background-color: hsl(var(--safeDarkAccent-hsl));
+                    opacity: 0.7;
+                    width: var(--carousel-btn-size);
+                    height:var(--carousel-btn-size);
+                    border-radius: 100%;
+                    align-self: center;
+                }
+
+                @media (max-width:480px)  {
+                    height: calc(100% - var(--carousel-btn-size) - 1rem);
+
+                    .tile-list-container {
+                        width: 100%;
+                    }
+
+                    .carousel-btn-right {
+                        top: calc(100% - var(--carousel-btn-size) - 0.5rem);
+                        right: calc(30% - 40px);
+                    }
+
+                    .carousel-btn-left {
+                        top: calc(100% - var(--carousel-btn-size) - 0.5rem);
+                        left: calc(30% - 40px);
+                    }
+                }
+
+                @media (min-width:480px)  {
+                    .carousel-btn-right {
+                        right: 5%
+                    }
+                    
+                    .carousel-btn-left {
+                        left: 5%
+                    }
+                }
+
+                .carousel-btn:hover {
+                    opacity: 1;
+                }
             }
-
-            @media (max-width:480px)  {
-                height: calc(100% - var(--carousel-btn-size) - 1rem);
-
-                .carousel-btn-right {
-                    top: calc(100% - var(--carousel-btn-size) - 0.5rem);
-                    right: calc(30% - 40px);
-                }
-
-                .carousel-btn-left {
-                    top: calc(100% - var(--carousel-btn-size) - 0.5rem);
-                    left: calc(30% - 40px);
-                }
-            }
-
-            @media (min-width:480px)  { 
-                .carousel-btn-right {
-                    right: 5%
-                }
-                
-                .carousel-btn-left {
-                    left: 5%
-                }
-            }
-
-            .carousel-btn:hover {
-                opacity: 1;
-            }
-        }
         </style>
     </head>
     <!-- carousel.html -->

@@ -9,12 +9,21 @@
     --safeInverseDarkAccent-hsl: 0,0%,100%;
     --black-hsl: 222.43902439,74.54545455%,10.78431373%;
     --white-hsl: 192,16.12903226%,93.92156863%;
-    --carousel-btn-size: 70px;
 }
 
 body {
     margin: 0;
     height: 100vh;
+}
+
+/*
+    ONLY COPY THE BELOW CSS INTO VIEW.HTML TO BE USEABLE FOR SQUARESPACE
+
+    THE CSS ABOVE IS TO ONLY OCALLY MOCK CSS CONDITIONS IN SQUARESPACE
+*/
+
+:root {
+    --carousel-btn-size: 70px;
 }
 
 #carousel {
@@ -23,41 +32,61 @@ body {
     display: flex;
     justify-content: center;
     min-width: 320px;
-    min-height: 400px;
 
-    .display-picture {
-        border-radius: 100%;
-        height: 35%;
-        width: 35%;
+    .tile-img-container {
+        height: 30%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+
+        div {
+            height: 90%;
+            img {
+                object-fit: cover;
+                object-position: top;
+                height: 100%;
+                aspect-ratio: 1 / 1;
+                border-radius: 100%;
+            }    
+        }
     }
 
+
     .tile-text {
-        /* font-size: 0.4em; */ 
+        text-align: center;
+
+        .date-header {
+            color: hsl(var(--safeDarkAccent-hsl));
+            font-size: 1.5rem;
+            margin: 0;
+        }
     }
 
     .register {
         background-color: hsl(var(--safeDarkAccent-hsl));
-        /* margin-top: 1rem; */
     }
 
-    .date-header {
-        color: hsl(var(--safeDarkAccent-hsl));
-    }
-
-    .btn-link {
+    .tile-btn-link {
         text-decoration: none;
         color: hsl(var(--safeInverseDarkAccent-hsl));
         padding: .9rem 1.2rem;
         border-radius: 0.4rem;
         box-sizing: border-box;
         font-size: 1.1rem;
+        letter-spacing: 0.05rem;
+        line-height: normal;
+    }
+
+    .tile-btn-link:hover {
+        opacity: 0.8;
     }
 
     .tile {
         height: 100%;
         background-color: hsl(var(--white-hsl));
         overflow: hidden;
-        justify-content: space-evenly;
     }
 
     .align-center {

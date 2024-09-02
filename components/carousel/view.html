@@ -163,19 +163,31 @@
 
         <!-- carousel.css -->
         <style>
-            /* KEEP :root COMMENTED IN PROD, UNCOMMENTED IN LOCAL */
-            /* :root {
-                --accent-hsl: 19.7080292,55.91836735%,48.03921569%;
-                --darkAccent-hsl: 202.14285714,77.77777778%,21.17647059%;
-                --lightAccent-hsl: 211.30434783,23.71134021%,80.98039216%;
-                --safeLightAccent-hsl: 19.7080292,55.91836735%,48.03921569%;
-                --safeDarkAccent-hsl: 19.7080292,55.91836735%,48.03921569%;
-                --safeInverseAccent-hsl: 0,0%,100%;
-                --safeInverseLightAccent-hsl: 0,0%,100%;
-                --safeInverseDarkAccent-hsl: 0,0%,100%;
-                --black-hsl: 222.43902439,74.54545455%,10.78431373%;
-                --white-hsl: 192,16.12903226%,93.92156863%;
-            } */
+        :root {
+            /* --accent-hsl: 19.7080292,55.91836735%,48.03921569%;
+            --darkAccent-hsl: 202.14285714,77.77777778%,21.17647059%;
+            --lightAccent-hsl: 211.30434783,23.71134021%,80.98039216%;
+            --safeLightAccent-hsl: 19.7080292,55.91836735%,48.03921569%;
+            --safeDarkAccent-hsl: 19.7080292,55.91836735%,48.03921569%;
+            --safeInverseAccent-hsl: 0,0%,100%;
+            --safeInverseLightAccent-hsl: 0,0%,100%;
+            --safeInverseDarkAccent-hsl: 0,0%,100%;
+            --black-hsl: 222.43902439,74.54545455%,10.78431373%;
+            --white-hsl: 192,16.12903226%,93.92156863%; */
+            --carousel-btn-size: 70px;
+        }
+
+        /* body {
+            margin: 0;
+            height: 100vh;
+        } */
+
+        #carousel {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            min-width: 320px;
 
             .display-picture {
                 border-radius: 100%;
@@ -219,7 +231,7 @@
             }
 
             .tile-list-container {
-                /* height: 100%; */
+                height: 100%;
                 width: 80%;
                 overflow: hidden;
             }
@@ -234,14 +246,8 @@
                 transition: transform 500ms ease 0s;
             }
 
-            #carousel {
-                height: 100%;
-                width: 100%;
-                display: flex;
-                justify-content: center;
-            }
-
             .carousel-btn {
+                position: absolute;
                 svg {
                     fill: white;
                     .btn-arrow {
@@ -257,30 +263,55 @@
                 cursor: pointer;
                 background-color: hsl(var(--safeDarkAccent-hsl));
                 opacity: 0.7;
-                width: 70px;
-                height: 70px;
+                width: var(--carousel-btn-size);
+                height:var(--carousel-btn-size);
                 border-radius: 100%;
                 align-self: center;
+            }
+
+            @media (max-width:480px)  {
+                height: calc(100% - var(--carousel-btn-size) - 1rem);
+
+                .carousel-btn-right {
+                    top: calc(100% - var(--carousel-btn-size) - 0.5rem);
+                    right: calc(30% - 40px);
+                }
+
+                .carousel-btn-left {
+                    top: calc(100% - var(--carousel-btn-size) - 0.5rem);
+                    left: calc(30% - 40px);
+                }
+            }
+
+            @media (min-width:480px)  { 
+                .carousel-btn-right {
+                    right: 5%
+                }
+                
+                .carousel-btn-left {
+                    left: 5%
+                }
             }
 
             .carousel-btn:hover {
                 opacity: 1;
             }
+        }
         </style>
     </head>
     <!-- carousel.html -->
     <body>
         <div id="carousel">
-            <button class="carousel-btn" onclick="prev()">
+            <div class="tile-list-container">
+                <div class="tile-list"></div>
+            </div>
+            <button class="carousel-btn carousel-btn-left" onclick="prev()">
                 <svg viewBox="0 0 44 18" xmlns="http://www.w3.org/2000/svg">
                     <path class="btn-arrow" d="M9.90649 16.96L2.1221 9.17556L9.9065 1.39116"></path>
                     <path class="btn-arrow" d="M42.8633 9.18125L3.37868 9.18125"></path>
 
             </button>
-            <div class="tile-list-container">
-                <div class="tile-list"></div>
-            </div>
-            <button class="carousel-btn" onclick="next()">
+            <button class="carousel-btn carousel-btn-right" onclick="next()">
                 <svg viewBox="0 0 44 18" xmlns="http://www.w3.org/2000/svg">
                     <path class="btn-arrow" d="M34.1477 1.39111L41.9321 9.17551L34.1477 16.9599"></path>
                     <path class="btn-arrow" d="M1.19088 9.16982H40.6755"></path>

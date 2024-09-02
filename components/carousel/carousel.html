@@ -6,16 +6,16 @@
     </head>
     <body>
         <div id="carousel">
-            <button class="carousel-btn" onclick="prev()">
+            <div class="tile-list-container">
+                <div class="tile-list"></div>
+            </div>
+            <button class="carousel-btn carousel-btn-left" onclick="prev()">
                 <svg viewBox="0 0 44 18" xmlns="http://www.w3.org/2000/svg">
                     <path class="btn-arrow" d="M9.90649 16.96L2.1221 9.17556L9.9065 1.39116"></path>
                     <path class="btn-arrow" d="M42.8633 9.18125L3.37868 9.18125"></path>
 
             </button>
-            <div class="tile-list-container">
-                <div class="tile-list"></div>
-            </div>
-            <button class="carousel-btn" onclick="next()">
+            <button class="carousel-btn carousel-btn-right" onclick="next()">
                 <svg viewBox="0 0 44 18" xmlns="http://www.w3.org/2000/svg">
                     <path class="btn-arrow" d="M34.1477 1.39111L41.9321 9.17551L34.1477 16.9599"></path>
                     <path class="btn-arrow" d="M1.19088 9.16982H40.6755"></path>

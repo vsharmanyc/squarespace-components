@@ -9,63 +9,12 @@
     --safeInverseDarkAccent-hsl: 0,0%,100%;
     --black-hsl: 222.43902439,74.54545455%,10.78431373%;
     --white-hsl: 192,16.12903226%,93.92156863%;
+    --carousel-btn-size: 70px;
 }
 
-.display-picture {
-    border-radius: 100%;
-    height: 35%;
-    width: 35%;
-}
-
-.tile-text {
-    /* font-size: 0.4em; */ 
-}
-
-.register {
-    background-color: hsl(var(--safeDarkAccent-hsl));
-    /* margin-top: 1rem; */
-}
-
-.date-header {
-    color: hsl(var(--safeDarkAccent-hsl));
-}
-
-.btn-link {
-    text-decoration: none;
-    color: hsl(var(--safeInverseDarkAccent-hsl));
-    padding: .9rem 1.2rem;
-    border-radius: 0.4rem;
-    box-sizing: border-box;
-    font-size: 1.1rem;
-}
-
-.tile {
-    height: 100%;
-    background-color: hsl(var(--white-hsl));
-    overflow: hidden;
-    justify-content: space-evenly;
-}
-
-.align-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.tile-list-container {
-    /* height: 100%; */
-    width: 80%;
-    overflow: hidden;
-}
-
-.tile-list {
-    display: flex;
-    height: 100%;
-    width: 100%;
-}
-
-.transition-effect {
-    transition: transform 500ms ease 0s;
+body {
+    margin: 0;
+    height: 100vh;
 }
 
 #carousel {
@@ -74,30 +23,117 @@
     display: flex;
     justify-content: center;
     min-width: 320px;
-}
+    min-height: 400px;
 
-.carousel-btn {
-    svg {
-        fill: white;
-        .btn-arrow {
-            stroke: white;
-            fill: none;
-            stroke-width: 2px;
-            stroke-linejoin: round;
-            stroke-linecap: round;
-        }
-        width: 40px;
+    .display-picture {
+        border-radius: 100%;
+        height: 35%;
+        width: 35%;
     }
-    border: none;
-    cursor: pointer;
-    background-color: hsl(var(--safeDarkAccent-hsl));
-    opacity: 0.7;
-    width: 70px;
-    height: 70px;
-    border-radius: 100%;
-    align-self: center;
-}
 
-.carousel-btn:hover {
-    opacity: 1;
+    .tile-text {
+        /* font-size: 0.4em; */ 
+    }
+
+    .register {
+        background-color: hsl(var(--safeDarkAccent-hsl));
+        /* margin-top: 1rem; */
+    }
+
+    .date-header {
+        color: hsl(var(--safeDarkAccent-hsl));
+    }
+
+    .btn-link {
+        text-decoration: none;
+        color: hsl(var(--safeInverseDarkAccent-hsl));
+        padding: .9rem 1.2rem;
+        border-radius: 0.4rem;
+        box-sizing: border-box;
+        font-size: 1.1rem;
+    }
+
+    .tile {
+        height: 100%;
+        background-color: hsl(var(--white-hsl));
+        overflow: hidden;
+        justify-content: space-evenly;
+    }
+
+    .align-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tile-list-container {
+        height: 100%;
+        width: 80%;
+        overflow: hidden;
+    }
+
+    .tile-list {
+        display: flex;
+        height: 100%;
+        width: 100%;
+    }
+
+    .transition-effect {
+        transition: transform 500ms ease 0s;
+    }
+
+    .carousel-btn {
+        position: absolute;
+        svg {
+            fill: white;
+            .btn-arrow {
+                stroke: white;
+                fill: none;
+                stroke-width: 2px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+            }
+            width: 40px;
+        }
+        border: none;
+        cursor: pointer;
+        background-color: hsl(var(--safeDarkAccent-hsl));
+        opacity: 0.7;
+        width: var(--carousel-btn-size);
+        height:var(--carousel-btn-size);
+        border-radius: 100%;
+        align-self: center;
+    }
+
+    @media (max-width:480px)  {
+        height: calc(100% - var(--carousel-btn-size) - 1rem);
+
+        .tile-list-container {
+            width: 100%;
+        }
+
+        .carousel-btn-right {
+            top: calc(100% - var(--carousel-btn-size) - 0.5rem);
+            right: calc(30% - 40px);
+        }
+
+        .carousel-btn-left {
+            top: calc(100% - var(--carousel-btn-size) - 0.5rem);
+            left: calc(30% - 40px);
+        }
+    }
+
+    @media (min-width:480px)  {
+        .carousel-btn-right {
+            right: 5%
+        }
+        
+        .carousel-btn-left {
+            left: 5%
+        }
+    }
+
+    .carousel-btn:hover {
+        opacity: 1;
+    }
 }

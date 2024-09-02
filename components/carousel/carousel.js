@@ -13,13 +13,24 @@ const createElement = (tag, properties = {}) => {
 
 const tile = (content) => {
     const tile = createElement('div', { classList: 'tile align-center' });
+
     const tileBody = [
-        createElement('img', { src: content.Image, classList: 'display-picture' }),
-        createElement('h3', { innerText: new Date(content.Date).toDateString() }),
+        content.Image && createElement('img', { src: content.Image, classList: 'display-picture' }),
+        createElement('div', { classList: 'tile-text' })
+    ]
+
+    tileBody[1].append(
+        createElement('h2', { innerText: new Date(content.Date).toDateString(), classList: 'date-header' }),
         createElement('div', { innerText: content.Heading }),
         createElement('div', { innerText: content.Subheading }),
         createElement('div', { innerText: content.Description })
-    ]
+    )
+
+    if (content.Registration) {
+        const btn = createElement('a', { innerText: 'Register', href: content.Registration,  target: '_blank', classList: 'btn-link register' });
+        tileBody.push(btn);
+    }
+
     tile.append(...tileBody);
     return tile
 };

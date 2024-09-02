@@ -24,13 +24,24 @@
 
             const tile = (content) => {
                 const tile = createElement('div', { classList: 'tile align-center' });
+
                 const tileBody = [
-                    createElement('img', { src: content.Image, classList: 'display-picture' }),
-                    createElement('h3', { innerText: new Date(content.Date).toDateString() }),
+                    content.Image && createElement('img', { src: content.Image, classList: 'display-picture' }),
+                    createElement('div', { classList: 'tile-text' })
+                ]
+
+                tileBody[1].append(
+                    createElement('h2', { innerText: new Date(content.Date).toDateString(), classList: 'date-header' }),
                     createElement('div', { innerText: content.Heading }),
                     createElement('div', { innerText: content.Subheading }),
                     createElement('div', { innerText: content.Description })
-                ]
+                )
+
+                if (content.Registration) {
+                    const btn = createElement('a', { innerText: 'Register', href: content.Registration,  target: '_blank', classList: 'btn-link register' });
+                    tileBody.push(btn);
+                }
+
                 tile.append(...tileBody);
                 return tile
             };
@@ -152,20 +163,44 @@
 
         <!-- carousel.css -->
         <style>
-            .display-picture {
-                border-radius: 100%;
-                height: 30%;
+            :root {
+                --vs-orange: #BF6336;
+                --vs-white-hsl: hsl(192,16.12903226%,93.92156863%);
             }
 
-            .tileDescription {
-                /* font-size: 0.4em; */
-                text-align: center;
+            .display-picture {
+                border-radius: 100%;
+                height: 35%;
+                width: 35%;
+            }
+
+            .tile-text {
+                /* font-size: 0.4em; */ 
+            }
+
+            .register {
+                background-color: var(--vs-orange);
+                /* margin-top: 1rem; */
+            }
+
+            .date-header {
+                color: var(--vs-orange);
+            }
+
+            .btn-link {
+                text-decoration: none;
+                color: white;
+                padding: .9rem 1.2rem;
+                border-radius: 0.4rem;
+                box-sizing: border-box;
+                font-size: 1.1rem;
             }
 
             .tile {
                 height: 100%;
-                background-color: lightgray;
+                background-color: var(--vs-white-hsl);
                 overflow: hidden;
+                justify-content: space-evenly;
             }
 
             .align-center {

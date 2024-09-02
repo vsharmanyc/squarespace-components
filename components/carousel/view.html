@@ -164,6 +164,7 @@
         <!-- carousel.css -->
         <style>
             :root {
+                --vs-orange-accent: hsl(19.7080292,55.91836735%,48.03921569%);
                 --vs-orange: #BF6336;
                 --vs-white-hsl: hsl(192,16.12903226%,93.92156863%);
             }
@@ -233,6 +234,33 @@
                 justify-content: center;
             }
 
+            .carousel-btn {
+                svg {
+                    fill: white;
+                    .btn-arrow {
+                        stroke: white;
+                        fill: none;
+                        stroke-width: 2px;
+                        stroke-linejoin: round;
+                        stroke-linecap: round;
+                    }
+                    width: 40px;
+                }
+                border: none;
+                cursor: pointer;
+                background-color: var(--vs-orange-accent);
+                opacity: 0.7;
+                width: 70px;
+                height: 70px;
+                border-radius: 100%;
+                align-self: center;
+            }
+
+            .carousel-btn:hover {
+                opacity: 1;
+            } 
+
+
             body {
                 height: 100vh;
                 width: 100vw;
@@ -247,11 +275,21 @@
     <!-- carousel.html -->
     <body>
         <div id="carousel">
-            <button onclick="prev()"><</button>
+            <button class="carousel-btn" onclick="prev()">
+                <svg viewBox="0 0 44 18" xmlns="http://www.w3.org/2000/svg">
+                    <path class="btn-arrow" d="M9.90649 16.96L2.1221 9.17556L9.9065 1.39116"></path>
+                    <path class="btn-arrow" d="M42.8633 9.18125L3.37868 9.18125"></path>
+
+            </button>
             <div class="tile-list-container">
                 <div class="tile-list"></div>
             </div>
-            <button onclick="next()">></button>
+            <button class="carousel-btn" onclick="next()">
+                <svg viewBox="0 0 44 18" xmlns="http://www.w3.org/2000/svg">
+                    <path class="btn-arrow" d="M34.1477 1.39111L41.9321 9.17551L34.1477 16.9599"></path>
+                    <path class="btn-arrow" d="M1.19088 9.16982H40.6755"></path>
+                </svg>
+            </button>
         </div>
     </body>
 </html>

@@ -163,11 +163,19 @@
 
         <!-- carousel.css -->
         <style>
-            :root {
-                --vs-orange-accent: hsl(19.7080292,55.91836735%,48.03921569%);
-                --vs-orange: #BF6336;
-                --vs-white-hsl: hsl(192,16.12903226%,93.92156863%);
-            }
+            /* KEEP :root COMMENTED IN PROD, UNCOMMENTED IN LOCAL */
+            /* :root {
+                --accent-hsl: 19.7080292,55.91836735%,48.03921569%;
+                --darkAccent-hsl: 202.14285714,77.77777778%,21.17647059%;
+                --lightAccent-hsl: 211.30434783,23.71134021%,80.98039216%;
+                --safeLightAccent-hsl: 19.7080292,55.91836735%,48.03921569%;
+                --safeDarkAccent-hsl: 19.7080292,55.91836735%,48.03921569%;
+                --safeInverseAccent-hsl: 0,0%,100%;
+                --safeInverseLightAccent-hsl: 0,0%,100%;
+                --safeInverseDarkAccent-hsl: 0,0%,100%;
+                --black-hsl: 222.43902439,74.54545455%,10.78431373%;
+                --white-hsl: 192,16.12903226%,93.92156863%;
+            } */
 
             .display-picture {
                 border-radius: 100%;
@@ -180,17 +188,17 @@
             }
 
             .register {
-                background-color: var(--vs-orange);
+                background-color: hsl(var(--safeDarkAccent-hsl));
                 /* margin-top: 1rem; */
             }
 
             .date-header {
-                color: var(--vs-orange);
+                color: hsl(var(--safeDarkAccent-hsl));
             }
 
             .btn-link {
                 text-decoration: none;
-                color: white;
+                color: hsl(var(--safeInverseDarkAccent-hsl));
                 padding: .9rem 1.2rem;
                 border-radius: 0.4rem;
                 box-sizing: border-box;
@@ -199,7 +207,7 @@
 
             .tile {
                 height: 100%;
-                background-color: var(--vs-white-hsl);
+                background-color: hsl(var(--white-hsl));
                 overflow: hidden;
                 justify-content: space-evenly;
             }
@@ -211,7 +219,7 @@
             }
 
             .tile-list-container {
-                height: 100%;
+                /* height: 100%; */
                 width: 80%;
                 overflow: hidden;
             }
@@ -227,7 +235,6 @@
             }
 
             #carousel {
-                max-height: 400px;
                 height: 100%;
                 width: 100%;
                 display: flex;
@@ -248,7 +255,7 @@
                 }
                 border: none;
                 cursor: pointer;
-                background-color: var(--vs-orange-accent);
+                background-color: hsl(var(--safeDarkAccent-hsl));
                 opacity: 0.7;
                 width: 70px;
                 height: 70px;
@@ -258,17 +265,6 @@
 
             .carousel-btn:hover {
                 opacity: 1;
-            } 
-
-
-            body {
-                height: 100vh;
-                width: 100vw;
-                margin: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                justify-items: center;
             }
         </style>
     </head>

@@ -26,7 +26,7 @@ body {
     --carousel-btn-size: 70px;
 }
 
-#carousel {
+#vsny-carousel {
     height: 100%;
     width: 100%;
     display: flex;

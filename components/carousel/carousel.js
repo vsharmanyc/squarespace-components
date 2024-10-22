@@ -26,7 +26,7 @@ const initVSNYCarousel = () => {
     const tile = (content) => {
         const tile = createElement('div', { classList: 'tile align-center' });
 
-        const imageContainer = createElement('div', { classList: 'tile-img-container'});
+        const imageContainer = createElement('div', { classList: 'tile-img-container' });
         const imageSizer = createElement('div');
         imageSizer.append(createElement('img', { src: content.Image }));
         content.Image && imageContainer.append(imageSizer);
@@ -61,6 +61,11 @@ const initVSNYCarousel = () => {
         tile.setAttribute('status', content.Status)
 
         return tile;
+    };
+
+    const formatSkeletonTiles = () => {
+        tileListElement = document.querySelector('#vsny-carousel .tile-list');
+        tileList(Array.from(tileListElement.children))
     };
 
     const tileList = (tiles = []) => {
@@ -135,6 +140,7 @@ const initVSNYCarousel = () => {
 
     const setupView = (tiles) => {
         tileListElement = document.querySelector('#vsny-carousel .tile-list');
+        tileListElement.innerHTML = '';
         tilesInView = getSuggestedTilesInView();
         tileListElement.append(...tileList(tiles));
         tileListElement.addEventListener('touchstart', onTouchStart);
@@ -168,6 +174,7 @@ const initVSNYCarousel = () => {
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        formatSkeletonTiles();
         fetchCarouselContent().then(contentArray => {
             const tiles = contentArray.map(tileContent => tile(tileContent));
             setupView(tiles);

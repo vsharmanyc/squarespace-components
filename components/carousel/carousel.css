@@ -89,6 +89,33 @@ body {
         overflow: hidden;
     }
 
+    .tile[status="Cancelled"]::before {
+        content: "CANCELLED";
+        position: absolute;
+        top: 45%;
+        background: hsl(var(--darkAccent-hsl));
+        color: hsl(var(--safeInverseDarkAccent-hsl));
+        padding: .9rem 1.2rem;
+        border-radius: 0.4rem;
+        box-sizing: border-box;
+        font-size: 1.1rem;
+        letter-spacing: 0.05rem;
+    }
+
+    .tile[status="Cancelled"]:hover {
+        opacity: 1;
+    }
+
+    .tile[status="Cancelled"] {
+        opacity: 50%;
+        cursor: not-allowed;
+
+        button, a {
+            pointer-events: none;
+            background-color: lightgray;
+        }
+    }
+
     .align-center {
         display: flex;
         flex-direction: column;

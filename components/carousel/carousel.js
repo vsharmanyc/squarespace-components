@@ -1,7 +1,8 @@
 // encapsulate the carousel logic/variables/functions in this function, and return the data needed globally
 const initVSNYCarousel = () => {
     // declare state variables
-    let viewLimit = 3; // sets the max numnber of tiles to be visible at all times
+    const MAX_NUM_TILES_IN_VIEW = 3; // sets the max number of tiles to be visible at all times
+    let tilesInView = MAX_NUM_TILES_IN_VIEW;
     let visibleStartIndex = 0; // index of the first visible tile
     let tileListElement; // reference to the tile list html element
     let touchstartX = 0
@@ -48,7 +49,7 @@ const initVSNYCarousel = () => {
         tileText.append(
             dateTime,
             headings,
-            createElement('p', { innerText: content.Description || '', classList: 'date-description' })
+            createElement('p', { innerHTML: content.Description || '', classList: 'date-description' })
         );
 
         tile.append(imageContainer, tileText);
@@ -57,21 +58,22 @@ const initVSNYCarousel = () => {
             tile.append(createElement('a', { innerText: 'Register', href: content.Registration,  target: '_blank', classList: 'tile-btn-link register' }));
         }
 
-        return tile
+        tile.setAttribute('status', content.Status)
+
+        return tile;
     };
 
     const tileList = (tiles = []) => {
         if (tiles.length) {
             const spacing = '1.5rem'; // controls the spacing between tiles
             tiles.forEach(tile => {
-                tile.style.minWidth = `calc(${100 / viewLimit}% - ${(viewLimit + 1) / viewLimit} * ${spacing})`;
+                tile.style.minWidth = `calc(${100 / tilesInView}% - ${(tilesInView + 1) / tilesInView} * ${spacing})`;
                 tile.style.marginLeft = spacing;
             })
             tiles[tiles.length - 1].style.marginRight = spacing;
         }
         return tiles;
     };
-
 
     const triggerTransition = () => {
         const children = tileListElement.children;
@@ -84,13 +86,13 @@ const initVSNYCarousel = () => {
     // replicated slideToPrevTile and slideToNextTile functionality using ux from  https://primeng.org/carousel as a reference
 
     const slideToPrevTile = () => {
-        if (visibleStartIndex - viewLimit < 0) return;
+        if (visibleStartIndex - tilesInView < 0) return;
 
-        // special case to always ensure viewLimit number tiles in view
-        if (visibleStartIndex % viewLimit != 0) {
-            visibleStartIndex -= visibleStartIndex % viewLimit;
+        // special case to always ensure tilesInView number tiles in view
+        if (visibleStartIndex % tilesInView != 0) {
+            visibleStartIndex -= visibleStartIndex % tilesInView;
         } else {
-            visibleStartIndex -= viewLimit;
+            visibleStartIndex -= tilesInView;
         }
 
         triggerTransition();
@@ -98,12 +100,12 @@ const initVSNYCarousel = () => {
 
     const slideToNextTile = () => {
         const children = tileListElement.children;
-        if (visibleStartIndex + viewLimit >= children.length) return;
+        if (visibleStartIndex + tilesInView >= children.length) return;
 
-        visibleStartIndex += viewLimit;
-        // special case to always ensure viewLimit number tiles in view
-        if (children.length - visibleStartIndex < viewLimit) {
-            visibleStartIndex -= viewLimit - (children.length - visibleStartIndex);
+        visibleStartIndex += tilesInView;
+        // special case to always ensure tilesInView number tiles in view
+        if (children.length - visibleStartIndex < tilesInView) {
+            visibleStartIndex -= tilesInView - (children.length - visibleStartIndex);
         }
 
         triggerTransition();
@@ -111,21 +113,21 @@ const initVSNYCarousel = () => {
 
     // we can force the number of tiles in view if we want
     // but less or more tiles may look better different screen sizes 
-    const getSuggestedViewLimit = () => {
+    const getSuggestedTilesInView = () => {
         if (window.screen.availWidth < 500) {
             return 1; // lets just suggest only 1 tile in view if screen width < 500px
         }
 
         const tileListWidth = tileListElement.getBoundingClientRect().width;
         const tileWidth = 350; // lets say a good width for a tile is 350px
-        return Math.floor(tileListWidth / tileWidth);
+        return Math.min(Math.floor(tileListWidth / tileWidth), MAX_NUM_TILES_IN_VIEW);
     };
 
     const resetView = () => {
-        const suggestedViewLimit = getSuggestedViewLimit();
-        if (viewLimit !== suggestedViewLimit) {
-            viewLimit = suggestedViewLimit;
-            // resize tiles based off new viewLimit
+        const suggestedTilesInView = getSuggestedTilesInView();
+        if (tilesInView !== suggestedTilesInView) {
+            tilesInView = suggestedTilesInView;
+            // resize tiles based off new tilesInView
             tileList(Array.from(tileListElement.children));
         }
         triggerTransition();
@@ -133,7 +135,7 @@ const initVSNYCarousel = () => {
 
     const setupView = (tiles) => {
         tileListElement = document.querySelector('#vsny-carousel .tile-list');
-        viewLimit = getSuggestedViewLimit();
+        tilesInView = getSuggestedTilesInView();
         tileListElement.append(...tileList(tiles));
         tileListElement.addEventListener('touchstart', onTouchStart);
         tileListElement.addEventListener('touchend', onTouchEnd);

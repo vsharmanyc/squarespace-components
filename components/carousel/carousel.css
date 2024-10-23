@@ -26,7 +26,7 @@ body {
     --carousel-btn-size: 70px;
 }
 
-@keyframes pulse {
+@keyframes skeletonPulse {
     0% {
         background: #e0e0e0;
     }
@@ -97,6 +97,7 @@ body {
 
     .tile {
         height: 100%;
+        width: 100%;
         background-color: hsl(var(--white-hsl));
         overflow: hidden;
     }
@@ -216,7 +217,7 @@ body {
         height: 70px;
         border-radius: 40%;
         background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-        animation: pulse 1.5s infinite ease-in-out;
+        animation: skeletonPulse 1.5s infinite ease-in-out;
     }
 
     .skeleton-button {
@@ -225,7 +226,7 @@ body {
         height: 50px;
         background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
         border-radius: 8px;
-        animation: pulse 1.5s infinite ease-in-out;
+        animation: skeletonPulse 1.5s infinite ease-in-out;
     }
     
     .skeleton-line {
@@ -233,7 +234,7 @@ body {
         margin: 10px 0;
         background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
         border-radius: 4px;
-        animation: pulse 1.5s infinite;
+        animation: skeletonPulse 1.5s infinite;
     }
     
     .skeleton-line:nth-child(2) {

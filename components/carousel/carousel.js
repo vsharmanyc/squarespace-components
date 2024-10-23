@@ -65,6 +65,7 @@ const initVSNYCarousel = () => {
 
     const formatSkeletonTiles = () => {
         tileListElement = document.querySelector('#vsny-carousel .tile-list');
+        tileListElement.innerHTML = tileListElement.innerHTML.repeat(getSuggestedTilesInView());
         tileList(Array.from(tileListElement.children))
     };
 

@@ -12,7 +12,8 @@
             // encapsulate the carousel logic/variables/functions in this function, and return the data needed globally
             const initVSNYCarousel = () => {
                 // declare state variables
-                let viewLimit = 3; // sets the max numnber of tiles to be visible at all times
+                const MAX_NUM_TILES_IN_VIEW = 3; // sets the max number of tiles to be visible at all times
+                let tilesInView = MAX_NUM_TILES_IN_VIEW;
                 let visibleStartIndex = 0; // index of the first visible tile
                 let tileListElement; // reference to the tile list html element
                 let touchstartX = 0
@@ -36,7 +37,7 @@
                 const tile = (content) => {
                     const tile = createElement('div', { classList: 'tile align-center' });
 
-                    const imageContainer = createElement('div', { classList: 'tile-img-container'});
+                    const imageContainer = createElement('div', { classList: 'tile-img-container' });
                     const imageSizer = createElement('div');
                     imageSizer.append(createElement('img', { src: content.Image }));
                     content.Image && imageContainer.append(imageSizer);
@@ -59,7 +60,7 @@
                     tileText.append(
                         dateTime,
                         headings,
-                        createElement('p', { innerText: content.Description || '', classList: 'date-description' })
+                        createElement('p', { innerHTML: content.Description || '', classList: 'date-description' })
                     );
 
                     tile.append(imageContainer, tileText);
@@ -73,11 +74,17 @@
                     return tile;
                 };
 
+                const formatSkeletonTiles = () => {
+                    tileListElement = document.querySelector('#vsny-carousel .tile-list');
+                    tileListElement.innerHTML = tileListElement.innerHTML.repeat(getSuggestedTilesInView());
+                    tileList(Array.from(tileListElement.children))
+                };
+
                 const tileList = (tiles = []) => {
                     if (tiles.length) {
                         const spacing = '1.5rem'; // controls the spacing between tiles
                         tiles.forEach(tile => {
-                            tile.style.minWidth = `calc(${100 / viewLimit}% - ${(viewLimit + 1) / viewLimit} * ${spacing})`;
+                            tile.style.minWidth = `calc(${100 / tilesInView}% - ${(tilesInView + 1) / tilesInView} * ${spacing})`;
                             tile.style.marginLeft = spacing;
                         })
                         tiles[tiles.length - 1].style.marginRight = spacing;
@@ -96,13 +103,13 @@
                 // replicated slideToPrevTile and slideToNextTile functionality using ux from  https://primeng.org/carousel as a reference
 
                 const slideToPrevTile = () => {
-                    if (visibleStartIndex - viewLimit < 0) return;
+                    if (visibleStartIndex - tilesInView < 0) return;
 
-                    // special case to always ensure viewLimit number tiles in view
-                    if (visibleStartIndex % viewLimit != 0) {
-                        visibleStartIndex -= visibleStartIndex % viewLimit;
+                    // special case to always ensure tilesInView number tiles in view
+                    if (visibleStartIndex % tilesInView != 0) {
+                        visibleStartIndex -= visibleStartIndex % tilesInView;
                     } else {
-                        visibleStartIndex -= viewLimit;
+                        visibleStartIndex -= tilesInView;
                     }
 
                     triggerTransition();
@@ -110,12 +117,12 @@
 
                 const slideToNextTile = () => {
                     const children = tileListElement.children;
-                    if (visibleStartIndex + viewLimit >= children.length) return;
+                    if (visibleStartIndex + tilesInView >= children.length) return;
 
-                    visibleStartIndex += viewLimit;
-                    // special case to always ensure viewLimit number tiles in view
-                    if (children.length - visibleStartIndex < viewLimit) {
-                        visibleStartIndex -= viewLimit - (children.length - visibleStartIndex);
+                    visibleStartIndex += tilesInView;
+                    // special case to always ensure tilesInView number tiles in view
+                    if (children.length - visibleStartIndex < tilesInView) {
+                        visibleStartIndex -= tilesInView - (children.length - visibleStartIndex);
                     }
 
                     triggerTransition();
@@ -123,21 +130,21 @@
 
                 // we can force the number of tiles in view if we want
                 // but less or more tiles may look better different screen sizes 
-                const getSuggestedViewLimit = () => {
+                const getSuggestedTilesInView = () => {
                     if (window.screen.availWidth < 500) {
                         return 1; // lets just suggest only 1 tile in view if screen width < 500px
                     }
 
                     const tileListWidth = tileListElement.getBoundingClientRect().width;
                     const tileWidth = 350; // lets say a good width for a tile is 350px
-                    return Math.floor(tileListWidth / tileWidth);
+                    return Math.min(Math.floor(tileListWidth / tileWidth), MAX_NUM_TILES_IN_VIEW);
                 };
 
                 const resetView = () => {
-                    const suggestedViewLimit = getSuggestedViewLimit();
-                    if (viewLimit !== suggestedViewLimit) {
-                        viewLimit = suggestedViewLimit;
-                        // resize tiles based off new viewLimit
+                    const suggestedTilesInView = getSuggestedTilesInView();
+                    if (tilesInView !== suggestedTilesInView) {
+                        tilesInView = suggestedTilesInView;
+                        // resize tiles based off new tilesInView
                         tileList(Array.from(tileListElement.children));
                     }
                     triggerTransition();
@@ -145,7 +152,8 @@
 
                 const setupView = (tiles) => {
                     tileListElement = document.querySelector('#vsny-carousel .tile-list');
-                    viewLimit = getSuggestedViewLimit();
+                    tileListElement.innerHTML = '';
+                    tilesInView = getSuggestedTilesInView();
                     tileListElement.append(...tileList(tiles));
                     tileListElement.addEventListener('touchstart', onTouchStart);
                     tileListElement.addEventListener('touchend', onTouchEnd);
@@ -178,6 +186,7 @@
                 }
 
                 document.addEventListener('DOMContentLoaded', () => {
+                    formatSkeletonTiles();
                     fetchCarouselContent().then(contentArray => {
                         const tiles = contentArray.map(tileContent => tile(tileContent));
                         setupView(tiles);
@@ -196,6 +205,18 @@
         <style>
             :root {
                 --carousel-btn-size: 70px;
+            }
+
+            @keyframes skeletonPulse {
+                0% {
+                    background: #e0e0e0;
+                }
+                50% {
+                    background: #d0d0d0;
+                }
+                100% {
+                    background: #e0e0e0;
+                }
             }
 
             #vsny-carousel {
@@ -257,6 +278,7 @@
 
                 .tile {
                     height: 100%;
+                    width: 100%;
                     background-color: hsl(var(--white-hsl));
                     overflow: hidden;
                 }
@@ -364,6 +386,45 @@
                 .carousel-btn:hover {
                     opacity: 1;
                 }
+
+                .skeleton-loader {
+                    padding: 16px;
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                .skeleton-image {
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 40%;
+                    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+                    animation: skeletonPulse 1.5s infinite ease-in-out;
+                }
+
+                .skeleton-button {
+                    align-self: center;
+                    width: 50%;
+                    height: 50px;
+                    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+                    border-radius: 8px;
+                    animation: skeletonPulse 1.5s infinite ease-in-out;
+                }
+                
+                .skeleton-line {
+                    height: 12px;
+                    margin: 10px 0;
+                    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+                    border-radius: 4px;
+                    animation: skeletonPulse 1.5s infinite;
+                }
+                
+                .skeleton-line:nth-child(2) {
+                    width: 80%;
+                }
+                
+                .skeleton-line:nth-child(3) {
+                    width: 90%;
+                }
             }
         </style>
     </head>
@@ -371,7 +432,18 @@
     <body>
         <div id="vsny-carousel">
             <div class="tile-list-container">
-                <div class="tile-list"></div>
+                <div class="tile-list">
+                    <!-- Lets have some skeleton tiles to begin with to indicate fetching content -->
+                    <div class="tile">
+                        <div class="skeleton-loader">
+                            <div class="skeleton-image"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-button"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <button class="carousel-btn carousel-btn-left" onclick="slideToPrevTile()">
                 <svg viewBox="0 0 44 18" xmlns="http://www.w3.org/2000/svg">

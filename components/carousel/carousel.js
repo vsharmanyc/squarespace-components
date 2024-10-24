@@ -180,8 +180,12 @@ const initVSNYCarousel = () => {
     document.addEventListener('DOMContentLoaded', () => {
         formatSkeletonTiles();
         fetchCarouselContent().then(contentArray => {
-            const tiles = contentArray.map(tileContent => tile(tileContent));
-            setupView(tiles);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const tiles = contentArray
+                        .filter(tileContent => new Date(tileContent.Date) >= today)
+                        .map(tileContent => tile(tileContent));
+                setupView(tiles);
         })
     });
 

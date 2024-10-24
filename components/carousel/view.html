@@ -34,10 +34,13 @@
                     }
                 }
 
+                const imageStyles = { circle: 'circle', square: 'square', icon: 'icon', 'icon circle': 'icon circle', 'icon square': 'icon square' };
+
                 const tile = (content) => {
                     const tile = createElement('div', { classList: 'tile align-center' });
 
-                    const imageContainer = createElement('div', { classList: 'tile-img-container' });
+                    const imageStyle = imageStyles[content['Image Style']?.toLowerCase()] || 'circle'
+                    const imageContainer = createElement('div', { classList: `tile-img-container ${imageStyle}` });
                     const imageSizer = createElement('div');
                     imageSizer.append(createElement('img', { src: content.Image }));
                     content.Image && imageContainer.append(imageSizer);
@@ -241,8 +244,24 @@
                             object-position: top;
                             height: 100%;
                             aspect-ratio: 1 / 1;
-                            border-radius: 100%;
                         }    
+                    }
+
+                    &.circle {
+                        img {
+                            border-radius: 100%;
+                        }
+                    }
+
+                    &.square {
+                        img {
+                            border-radius: 0%;
+                        }
+                    }
+
+                    &.icon {
+                        height: 10%;
+                        margin-left: -75%;
                     }
                 }
 

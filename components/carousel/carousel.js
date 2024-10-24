@@ -23,10 +23,13 @@ const initVSNYCarousel = () => {
         }
     }
 
+    const imageStyles = { circle: 'circle', square: 'square', icon: 'icon', 'icon circle': 'icon circle', 'icon square': 'icon square' };
+
     const tile = (content) => {
         const tile = createElement('div', { classList: 'tile align-center' });
 
-        const imageContainer = createElement('div', { classList: 'tile-img-container' });
+        const imageStyle = imageStyles[content['Image Style']?.toLowerCase()] || 'circle'
+        const imageContainer = createElement('div', { classList: `tile-img-container ${imageStyle}` });
         const imageSizer = createElement('div');
         imageSizer.append(createElement('img', { src: content.Image }));
         content.Image && imageContainer.append(imageSizer);

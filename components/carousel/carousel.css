@@ -36,18 +36,6 @@
             }    
         }
 
-        &.circle {
-            img {
-                border-radius: 100%;
-            }
-        }
-
-        &.square {
-            img {
-                border-radius: 0%;
-            }
-        }
-
         &.icon {
             height: 10%;
             margin-left: -75%;
@@ -65,6 +53,18 @@
         }
     }
 
+    .heading {
+        font-weight: 600;
+    }
+
+    .subheading {
+        font-weight: 500;
+    }
+
+    .speaker {
+        font-weight: 400;
+    }
+
     .register {
         background-color: hsl(var(--safeDarkAccent-hsl));
     }
@@ -73,7 +73,7 @@
         text-decoration: none;
         color: hsl(var(--safeInverseDarkAccent-hsl));
         padding: .9rem 1.2rem;
-        border-radius: 0.4rem;
+        border-radius: 500px;
         box-sizing: border-box;
         font-size: 1.1rem;
         letter-spacing: 0.05rem;
@@ -87,8 +87,28 @@
     .tile {
         height: 100%;
         width: 100%;
-        background-color: hsl(var(--white-hsl));
+        background-color: white;
         overflow: hidden;
+        border-color: #C3CEDA;
+        border-style: solid;
+    }
+
+    .pill-event {
+        width: 5em;
+        height: 1.5em;
+        background-color:#0C4160;
+        color: white;
+        border-radius: 500px;
+        position: absolute;
+        right: 26%;
+        top: 1%;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 1.5em;
+    }
+
+    .blue-text {
+        color: #0C4160;
     }
 
     .tile[status="Cancelled"]::before {
@@ -102,6 +122,7 @@
         box-sizing: border-box;
         font-size: 1.1rem;
         letter-spacing: 0.05rem;
+        border-radius: 500px;
     }
 
     .tile[status="Cancelled"] {
@@ -112,6 +133,10 @@
             pointer-events: none;
             background-color: lightgray;
         }
+    }
+
+    a {
+        border-radius: 500px;
     }
 
     .align-center {

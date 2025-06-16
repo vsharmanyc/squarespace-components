@@ -17,51 +17,61 @@ const initVSNYCarousel = () => {
     const formatDate = (dateString) => {
         try {
             const date = new Date(dateString);
-            return date.toLocaleString('default', { month: 'short', day: 'numeric' });
+            return date.toLocaleString('default', { weekday: 'short', month: 'short', day: 'numeric' }).replace(',', ' . ');
         } catch(e) {
             return '';
         }
     }
 
-    const imageStyles = { circle: 'circle', square: 'square', icon: 'icon', 'icon circle': 'icon circle', 'icon square': 'icon square' };
+    const getLink = (file) => `https://raw.githubusercontent.com/vsharmanyc/squarespace-components/refs/heads/master/components/carousel/assets/${file}`;
+    const imgLinks = {
+        FESTIVAL: getLink('special.png'),
+        GOSPEL:  getLink('gospel.png'),
+        GITA:  getLink('gita.jpg'),
+        SUNDAY:  getLink('altar.jpg')
+    };
 
     const tile = (content) => {
+        console.log(content);
         const tile = createElement('div', { classList: 'tile align-center' });
 
-        const imageStyle = imageStyles[content['Image Style']?.toLowerCase()] || 'circle'
+
+        // IMAGE SECTION
+        const imageStyle = 'square';
         const imageContainer = createElement('div', { classList: `tile-img-container ${imageStyle}` });
         const imageSizer = createElement('div');
-        imageSizer.append(createElement('img', { src: content.Image }));
-        content.Image && imageContainer.append(imageSizer);
+        imageSizer.append(createElement('img', { src: imgLinks[ content?.event_type || imgLinks.FESTIVAL ] }));
+        imageContainer.append(imageSizer);
 
-        const tileText = createElement('div', { classList: 'tile-text' })
-
+        // DATE AND TIME SECTION
         const dateTime = createElement('div', { classList: 'date-time' });
         dateTime.append(
-            createElement('h2', { innerText: formatDate(content.Date), classList: 'date-header' }),
-            createElement('div', { innerText: content.Time, classList: 'time-header' })
+            createElement('p', { innerText: formatDate(content.date), classList: 'date-header' }),
+            createElement('p', { innerText: content.time, classList: 'time-header blue-text' })
         );
 
-        const headings = createElement('p');
-        headings.append(
-            createElement('strong', { innerText: content.Heading || '', classList: 'tile-heading'}),
-            createElement('br'),
-            createElement('em', { innerText: content.Subheading || '', classList: 'tile-subheading' }),
+        // EVENT INFO SECTION
+        const eventInfo = createElement('p');
+        eventInfo.append(
+            createElement('p', { innerText: content.heading || '', classList: 'heading blue-text'}),
+            createElement('p', { innerText: content.subheading || '', classList: 'subheading blue-text' }),
+            createElement('p', { innerText: content.speaker || '', classList: 'speaker blue-text' }),
         )
 
-        tileText.append(
-            dateTime,
-            headings,
-            createElement('p', { innerHTML: content.Description || '', classList: 'date-description' })
-        );
+        // LINKS SECTION
+        const linksSection = createElement('div', { classList: 'links-section' })
 
-        tile.append(imageContainer, tileText);
-
-        if (content.Registration) {
-            tile.append(createElement('a', { innerText: 'Register', href: content.Registration,  target: '_blank', classList: 'tile-btn-link register' }));
+        if (content.registration_link) {
+            linksSection.append(createElement('a', { innerText: 'Register', href: content.registration_link,  target: '_blank', classList: 'tile-btn-link register' }));
         }
 
-        tile.setAttribute('status', content.Status)
+        tile.setAttribute('status', content.status);
+
+        tile.append(imageContainer, dateTime, eventInfo, linksSection);
+
+        // const pill = createElement('div', { classList: 'pill-event'});
+        // pill.innerText = 'Festival';
+        // tile.append(pill)
 
         return tile;
     };
@@ -171,7 +181,7 @@ const initVSNYCarousel = () => {
 
 
     const fetchCarouselContent = () => {
-        const url = 'https://script.google.com/macros/s/AKfycbwJrO9SW0gmpIyUXhVY4c9s-zo6NWgMENJqfjLWVv4gdccPgzerJZ8MXWXqi0MCtCze/exec';
+        const url = 'https://script.google.com/macros/s/AKfycbya2Mwy9XeugjnjQkXJetLhabTwxT10Vr1LHxaT0RRT4hX69t6bv5OgoS3cjn9JfTlhZA/exec';
         return fetch(url)
         .then(response => response.json())
         .catch(() => []);
@@ -180,10 +190,16 @@ const initVSNYCarousel = () => {
     document.addEventListener('DOMContentLoaded', () => {
         formatSkeletonTiles();
         fetchCarouselContent().then(contentArray => {
+
+             static =  {
+
+                
+             }
+                console.log(contentArray)
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
                 const tiles = contentArray
-                        .filter(tileContent => new Date(tileContent.Date) >= today)
+                        .filter(tileContent => new Date(tileContent.date) >= today)
                         .map(tileContent => tile(tileContent));
                 setupView(tiles);
         })

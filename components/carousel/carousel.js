@@ -44,19 +44,17 @@ const initVSNYCarousel = () => {
         imageContainer.append(imageSizer);
 
         // DATE AND TIME SECTION
-        const dateTime = createElement('div', { classList: 'date-time' });
+        const dateTime = createElement('div', { classList: 'date-time align-center' });
         dateTime.append(
-            createElement('p', { innerText: formatDate(content.date), classList: 'date-header' }),
-            createElement('p', { innerText: content.time, classList: 'time-header blue-text' })
+            createElement('h1', { innerText: formatDate(content.date), classList: 'date-header' }),
+            createElement('h4', { innerText: content.time, classList: 'time-header blue-text' })
         );
 
         // EVENT INFO SECTION
-        const eventInfo = createElement('p');
-        eventInfo.append(
-            createElement('p', { innerText: content.heading || '', classList: 'heading blue-text'}),
-            createElement('p', { innerText: content.subheading || '', classList: 'subheading blue-text' }),
-            createElement('p', { innerText: content.speaker || '', classList: 'speaker blue-text' }),
-        )
+        const eventInfo = createElement('div', { classList: 'event-info align-center' });
+        content?.heading && eventInfo.append(createElement('div', { innerText: content.heading, classList: 'heading blue-text'}));
+        content?.subheading && eventInfo.append(createElement('div', { innerText: content.subheading, classList: 'subheading blue-text' }));
+        content?.speaker && eventInfo.append(createElement('div', { innerText: content.speaker, classList: 'speaker blue-text' }));
 
         // LINKS SECTION
         const linksSection = createElement('div', { classList: 'links-section' })
@@ -189,12 +187,7 @@ const initVSNYCarousel = () => {
 
     document.addEventListener('DOMContentLoaded', () => {
         formatSkeletonTiles();
-        fetchCarouselContent().then(contentArray => {
-
-             static =  {
-
-                
-             }
+        fetchMockData().then(contentArray => {
                 console.log(contentArray)
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
